@@ -25,7 +25,19 @@ class YogoRecord
       @version, @type, @name, @content = {},{},{},[{}]
     end
   end
-  
+
+  def self.build(json)
+    case JSON[json]['type']
+      when 'datatype'
+        YRDatatype.new(json)
+      when 'datamodel'
+        YRDatamodel.new(json)
+      when 'datarecord'
+        YRDatarecord.new(json)
+      else
+        self.new(json)
+    end
+  end
 
   def to_json
     { :version => @version,

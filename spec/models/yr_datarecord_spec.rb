@@ -8,7 +8,7 @@ describe YRDatarecord do
     # content
     @json_str = { :version => 0,
                   :type => :datatype,
-                  :name => 'String',
+                  :id => 'String',
                   :content => [
                     {:label => 'String'},
                     {:class => 'String'}
@@ -17,7 +17,7 @@ describe YRDatarecord do
                 
     @json_int = { :version => 0,
                   :type => :datatype,
-                  :name => 'Integer',
+                  :id => 'Integer',
                   :content => [
                     {:label => 'Integer'},
                     {:class => 'Integer'}
@@ -26,17 +26,17 @@ describe YRDatarecord do
   
     @json_dm = { :version => 0,
                  :type => :datamodel,
-                 :name => 'Person',
+                 :id => 'Person',
                  :content =>  [
-                   {:label => 'first_name', :datatype => 'String'},
-                   {:label => 'last_name', :datatype => 'String'},
-                   {:label => 'num_items', :datatype => 'Integer'},
+                   {:label => 'first_name', :datatype_id => 'String'},
+                   {:label => 'last_name', :datatype_id => 'String'},
+                   {:label => 'num_items', :datatype_id => 'Integer'},
                  ]
                 }
                 
     @json_dr = { :version => 0,
                  :type => :datarecord,
-                 :name => 'Person',
+                 :datamodel_id => 'Person',
                  :content => [
                    {:first_name => 'Yogo'},
                    {:last_name => 'Datastore'},
