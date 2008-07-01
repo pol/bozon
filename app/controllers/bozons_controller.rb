@@ -42,19 +42,19 @@ class BozonsController < ApplicationController
 
   # POST /bozons
   # POST /bozons.xml
+  # POST /bozons.json
   def create
-    @bozon = Bozon.new(params[:bozon])
-
+    @bozon = Bozon.new(:content => params[:json])
     respond_to do |format|
-      if @bozon.save
+      if @bozon.valid? && @bozon.save
         flash[:notice] = 'Bozon was successfully created.'
         format.html { redirect_to(@bozon) }
         format.xml  { render :xml => @bozon, :status => :created, :location => @bozon }
-        format.json { render :json => @bozon, :status => :created, :location => @bozon }
+        format.json { render :json => @bozon.to_json, :status => :created, :location => @bozon }
       else
-        format.html { render :action => "new" }
+        format.html { render :action => "new", :status => :unprocessable_entity }
         format.xml  { render :xml => @bozon.errors, :status => :unprocessable_entity }
-        format.json  { render :json => @bozon.errors, :status => :unprocessable_entity }
+        format.json  { render :json => @bozon.to_json, :status => :unprocessable_entity }
       end
     end
   end

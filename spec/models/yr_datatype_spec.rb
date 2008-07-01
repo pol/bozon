@@ -6,21 +6,19 @@ describe YRDatatype do
     # version
     # type {:datatype => "Basic Data Definition", :datamodel => "Model Component", :datarecord => "Actual Piece of Data"}
     # content
-    @json_str = { :version => 0,
-                  :type => :datatype,
-                  :name => 'String',
+    @json_str = { :_rev => 0,
+                  :_id => 'String',
+                  :_type => :datatype,
                   :content => [
-                    {:label => 'String'},
-                    {:class => 'String'}
+                    {:label => 'String', :class => 'String'}
                   ] 
                 }
     # not yet testing the other datatypes
-    @json_int = { :version => 0,
-                  :type => :datatype,
-                  :name => 'Integer',
+    @json_int = { :_rev => 0,
+                  :_id => 'Integer',
+                  :_type => :datatype,
                   :content => [
-                    {:label => 'Integer'},
-                    {:class => 'Integer'}
+                    {:label => 'Integer', :class => 'Integer'}
                   ] 
                 }
   end
@@ -31,7 +29,7 @@ describe YRDatatype do
   end
   
   it "should validate like a YogoRecord " do
-    @json_str.delete(:type)
+    @json_str.delete(:_type)
     @yr = YogoRecord.new(@json_str.to_json)
     @yr.should_not be_valid
     @yogo = YRDatatype.new(@json_str.to_json)

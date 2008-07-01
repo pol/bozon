@@ -6,27 +6,25 @@ describe YRDatarecord do
     # version
     # type {:datatype => "Basic Data Definition", :datamodel => "Model Component", :datarecord => "Actual Piece of Data"}
     # content
-    @json_str = { :version => 0,
-                  :type => :datatype,
-                  :id => 'String',
+    @json_str = { :_rev => 0,
+                  :_id => 'String',
+                  :_type => :datatype,
                   :content => [
-                    {:label => 'String'},
-                    {:class => 'String'}
+                    {:label => 'String', :class => 'String'}
                   ] 
                 }
                 
-    @json_int = { :version => 0,
-                  :type => :datatype,
-                  :id => 'Integer',
+    @json_int = { :_rev => 0,
+                  :_id => 'Integer',
+                  :_type => :datatype,
                   :content => [
-                    {:label => 'Integer'},
-                    {:class => 'Integer'}
+                    {:label => 'Integer', :class => 'Integer'}
                   ] 
                 }
   
-    @json_dm = { :version => 0,
-                 :type => :datamodel,
-                 :id => 'Person',
+    @json_dm = { :_rev => 0,
+                 :_id => 'Person',
+                 :_type => :datamodel,
                  :content =>  [
                    {:label => 'first_name', :datatype_id => 'String'},
                    {:label => 'last_name', :datatype_id => 'String'},
@@ -34,8 +32,9 @@ describe YRDatarecord do
                  ]
                 }
                 
-    @json_dr = { :version => 0,
-                 :type => :datarecord,
+    @json_dr = { :_rev => 0,
+                 :_id => 'FirstRecord',
+                 :_type => :datarecord,
                  :datamodel_id => 'Person',
                  :content => [
                    {:first_name => 'Yogo'},
@@ -51,12 +50,15 @@ describe YRDatarecord do
   end
   
   it "should validate like a YogoRecord " do
-    @json_str.delete(:type)
+    @json_str.delete(:_type)
     @yr = YogoRecord.new(@json_str.to_json)
     @yr.should_not be_valid
     @yogo = YRDatarecord.new(@json_str.to_json)
     @yogo.should_not be_valid
   end
+  
+  it "should have a :datamodel_id that references an existing datamodel"
+  it "should have content elements in the same order as the datamodel elements"
 
 end
   

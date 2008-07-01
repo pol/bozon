@@ -1,13 +1,15 @@
 require 'json'
+require 'uuidtools'
 class YogoRecord
-  attr_accessor :version, :type, :content, :name
-  
+  attr_accessor :_rev, :_id, :_type, :content
+
   include Validateable
-  validates_presence_of :version
-  validates_presence_of :type
+  validates_presence_of :_rev
+  validates_presence_of :_id
+  validates_presence_of :_type
   validates_presence_of :content
-  validates_format_of :type, :with => /(datatype)|(datamodel)|(datarecord)/
-  validates_numericality_of :version
+  validates_format_of :_type, :with => /(datatype)|(datamodel)|(datarecord)/
+  validates_numericality_of :_rev
 
   def validate
     unless [Array,Hash].include?(content.class)
@@ -16,18 +18,26 @@ class YogoRecord
   end
   
   def initialize(json = '')
+    @_rev, @_id, @_type, @content = '','','',[{}]
     unless json.empty?
-        @version = JSON[json]['version']
-        @type = JSON[json]['type']
-        @content = JSON[json]['content']
-        @name = JSON[json]['name']
-    else
-      @version, @type, @name, @content = {},{},{},[{}]
+      @_rev = JSON[json]['_rev']
+      @_id = JSON[json]['_id']
+      @_type = JSON[json]['_type']
+      @content = JSON[json]['content']
     end
+    
+    if @_id.nil? or @_id.empty?
+      @_id = UUID.random_create.to_s
+    end
+    
+    if @_rev.nil?
+      @_rev = 0
+    end
+
   end
 
   def self.build(json)
-    case JSON[json]['type']
+    case JSON[json]['_type']
       when 'datatype'
         YRDatatype.new(json)
       when 'datamodel'
@@ -35,16 +45,22 @@ class YogoRecord
       when 'datarecord'
         YRDatarecord.new(json)
       else
-        self.new(json)
+        self.new(json)        
     end
   end
 
+
   def to_json
-    { :version => @version,
-      :type => @type,
-      :name => @name,
+    { :_rev => @_rev,
+      :_id => @_id,
+      :_type => @_type,
       :content => @content
       }.to_json
   end
+
+  # This might need to happen if the data items need to be immutable
+  # def index
+  #   YogoRecordIndex.new(@_id, @_rev)
+  # end
 
 end
